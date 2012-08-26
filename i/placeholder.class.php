@@ -8,7 +8,7 @@ if (strpos(__FILE__, $_SERVER['PHP_SELF'])) { header('HTTP/1.0 403 Forbidden'); 
  * @link http://github.com/img-src/placeholder
  */
 class Placeholder {
-	private $bgColor, $cache, $cacheDir, $expires, $font, $height, $maxHeight, $maxWidth, $textColor, $width;
+	private $bgColor, $cache, $cacheDir, $expires, $font, $height, $maxHeight, $maxWidth, $textColor, $width, $message;
 
 	function __construct() {
 		$this->bgColor = 'dddddd';
@@ -19,6 +19,20 @@ class Placeholder {
 		$this->maxHeight = 2000;
 		$this->maxWidth = 2000;
 		$this->textColor = '000000';
+		$this->message = "";
+	}
+
+	/**
+	 * Sets message 
+	 * 
+	 * @param string $hex - hex code value
+	 */
+	function setMessage($text) {
+		if (strlen($text) > 0) {
+				$this->message = urldecode($text);
+		} else {
+			throw new InvalidArgumentException('Message not set.');
+		}
 	}
 
 	/**
@@ -191,7 +205,11 @@ class Placeholder {
 				// convert textColor hex to RGB values
 				list($textR, $textG, $textB) = $this->hexToDec($this->textColor);
 				$textColor = imagecolorallocate($image, $textR, $textG, $textB);
-				$text = $this->width . 'x' . $this->height;
+				if ($this->message){
+					$text = $this->message;
+				} else {
+					$text = $this->width . 'x' . $this->height;
+				}
 				imagefilledrectangle($image, 0, 0, $this->width, $this->height, $bgColor);
 				$fontSize = 26;
 				$textBoundingBox = imagettfbbox($fontSize, 0, $this->font, $text);
