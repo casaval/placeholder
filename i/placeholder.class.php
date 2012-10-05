@@ -15,10 +15,10 @@ class Placeholder {
 		$this->cache = FALSE;
 		$this->cacheDir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'cache';
 		$this->expires = 604800;
-		$this->font = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'whitrabt.ttf';
+		$this->font = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Oswald-Regular.ttf';
 		$this->maxHeight = 2000;
 		$this->maxWidth = 2000;
-		$this->textColor = '000000';
+		$this->textColor = '333333';
 		$this->message = "";
 	}
 
@@ -206,19 +206,29 @@ class Placeholder {
 				list($textR, $textG, $textB) = $this->hexToDec($this->textColor);
 				$textColor = imagecolorallocate($image, $textR, $textG, $textB);
 				if ($this->message){
-					$text = $this->message;
+					$text = str_replace("_", " ", $this->message);
+					$subText = $this->width . 'x' . $this->height;
 				} else {
 					$text = $this->width . 'x' . $this->height;
+					$subText = "";
 				}
 				imagefilledrectangle($image, 0, 0, $this->width, $this->height, $bgColor);
 				$fontSize = 26;
+				$subFontSize = 12;
+				$textLineSpacing = 2;
 				$textBoundingBox = imagettfbbox($fontSize, 0, $this->font, $text);
 				// decrease the default font size until it fits nicely within the image
 				while (((($this->width - ($textBoundingBox[2] - $textBoundingBox[0])) < 10) || (($this->height - ($textBoundingBox[1] - $textBoundingBox[7])) < 10)) && ($fontSize > 1)) {
 					$fontSize--;
 					$textBoundingBox = imagettfbbox($fontSize, 0, $this->font, $text);
 				}
-				imagettftext($image, $fontSize, 0, ($this->width / 2) - (($textBoundingBox[2] - $textBoundingBox[0]) / 2), ($this->height / 2) + (($textBoundingBox[1] - $textBoundingBox[7]) / 2), $textColor, $this->font, $text);
+				imagettftext($image, $fontSize, 0, ($this->width / 2) - (($textBoundingBox[2] - $textBoundingBox[0]) / 2), ($this->height / 2), $textColor, $this->font, $text);
+				if ($subText != ""){
+					$subFontSize = floor($fontSize * 0.50); //scale subtitle font to smaller than main font;
+					if ($subFontSize < 9) $subFontSize = 9;
+					$subTextBoundingBox = imagettfbbox($subFontSize, 0, $this->font, $subText);
+					imagettftext($image, $subFontSize, 0, ($this->width / 2) - (($subTextBoundingBox[2] - $subTextBoundingBox[0]) / 2), ($this->height / 2) + $fontSize + $textLineSpacing, $textColor, $this->font, $subText);
+				}
 				imagepng($image);
 				// write cache
 				if ($this->cache === TRUE && is_writable($this->cacheDir)) {

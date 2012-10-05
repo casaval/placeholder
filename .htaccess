@@ -1,9 +1,11 @@
 RewriteEngine On
 RewriteBase /
 RewriteRule ^(\d+)/?$ /i/index.php?w=$1&h=$1
+RewriteRule ^(\d+)/([a-zA-Z0-9_]*)/?$ /i/index.php?w=$1&h=$1&message=$2
 RewriteRule ^(\d+)x(\d+)/?$ /i/index.php?w=$1&h=$2
+RewriteRule ^(\d+)x(\d+)/([a-zA-Z0-9_]*)/?$ /i/index.php?w=$1&h=$2&message=$3
 RewriteRule ^(\d+)/([a-fA-F0-9]{3}|[a-fA-F0-9]{6})/?$ /i/index.php?w=$1&h=$1&bgColor=$2
 RewriteRule ^(\d+)x(\d+)/([a-fA-F0-9]{3}|[a-fA-F0-9]{6})/?$ /i/index.php?w=$1&h=$2&bgColor=$3
 RewriteRule ^(\d+)/([a-fA-F0-9]{3}|[a-fA-F0-9]{6})/([a-fA-F0-9]{3}|[a-fA-F0-9]{6})/?$ /i/index.php?w=$1&h=$1&bgColor=$2&textColor=$3
-RewriteRule ^(\d+)x(\d+)/([a-fA-F0-9]{3}|[a-fA-F0-9]{6})/([a-fA-F0-9]{3}|[a-fA-F0-9]{6})$ /i/index.php?w=$1&h=$2&bgColor=$3&textColor=$4
-RewriteRule ^(\d+)x(\d+)/([a-fA-F0-9]{3}|[a-fA-F0-9]{6})/([a-fA-F0-9]{3}|[a-fA-F0-9]{6})/([a-zA-Z-0-9])$ /i/index.php?w=$1&h=$2&bgColor=$3&textColor=$4&message=$5
+RewriteRule ^(\d+)x(\d+)/([a-fA-F0-9]{3}|[a-fA-F0-9]{6})/([a-fA-F0-9]{3}|[a-fA-F0-9]{6})/?$ /i/index.php?w=$1&h=$2&bgColor=$3&textColor=$4
+RewriteRule ^(\d+)x(\d+)/([a-fA-F0-9]{3}|[a-fA-F0-9]{6})/([a-fA-F0-9]{3}|[a-fA-F0-9]{6})/([a-zA-Z0-9_]*)/?$ /i/index.php?w=$1&h=$2&bgColor=$3&textColor=$4&message=$5
